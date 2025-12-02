@@ -4,7 +4,9 @@ steps:
       - build
       - '-t'
       - 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA'
-      - .
+      - '-f'
+      - 'myapp/Dockerfile'
+      - 'myapp/
   - name: gcr.io/cloud-builders/docker
     args:
       - push

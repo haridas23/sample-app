@@ -1,18 +1,20 @@
 steps:
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - cd myapp 
-      - docker build
-      - '-t'
-      - 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA'
-      - '-f' 
-      - 'Dockerfile'
-      - .
-    - name: gcr.io/cloud-builders/docker
-    args:
-      - push
-      - 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA'
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA',
+      '.'
+    ]
+
+  # Step 2: Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA'
+    ]
+
 images:
   - 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA'
 options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  logging: CLOUD_LOGGING_ONLY

@@ -16,4 +16,3 @@ images:
   - 'asia-south1-docker.pkg.dev/s-0-009988/sample-app/sample-app:$COMMIT_SHA'
 options:
   logging: CLOUD_LOGGING_ONLY
-

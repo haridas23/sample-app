@@ -40,10 +40,13 @@ steps:
         "--zone", "asia-south1-c",
         "--project", "s-0-009988"
       ]
-    # The GKE config is written to /root/.kube/config inside this container
+    # Set the KUBECONFIG env var here. The GKE credentials will be written to this path
+    # and saved to the 'kube' volume.
+    env:
+      - 'KUBECONFIG=/root/.kube/config'
     volumes:
       - name: kube
-        path: /root/.kube # The shared volume
+        path: /root/.kube
 
   # ---------- Replace image tag inside YAML (Requires KUBECONFIG for later steps) ----------
   # No change to this step, but it must precede the kubectl steps.

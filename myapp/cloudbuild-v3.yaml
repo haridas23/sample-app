@@ -23,7 +23,7 @@ steps:
     args:
       [
         "-c",
-        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev -y && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status -f myapp/deployment.yaml --namespace default"
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status -f myapp/deployment.yaml --namespace default"
       ]
       
 options:

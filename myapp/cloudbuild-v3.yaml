@@ -23,20 +23,7 @@ steps:
     args:
       [
         "-c",
-        # 1. GKE Auth
-        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && "
-
-        # 2. Replace image tag: ***FIXED to use :latest tag***
-        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/deployment.yaml && "
-
-        # 3. Configure Docker (This step is technically redundant in Cloud Build but harmless)
-        "gcloud auth configure-docker asia-south1-docker.pkg.dev && "
-        
-        # 4. Apply Kubernetes manifests
-        "kubectl apply -f myapp/deployment.yaml --namespace default && "
-
-        # 5. Wait for rollout
-        "kubectl rollout status -f myapp/deployment.yaml --namespace default"
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status -f myapp/deployment.yaml --namespace default"
       ]
       
 options:

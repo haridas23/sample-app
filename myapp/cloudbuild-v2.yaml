@@ -10,12 +10,12 @@ steps:
       ]
 
   # ---------- Push to Artifact Registry ----------
-  - name: gcr.io/cloud-builders/docker
-    args:
-      [
-        "push",
-        "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA"
-      ]
+- name: gcr.io/cloud-builders/gcloud
+  entrypoint: "bash"
+  args:
+    - "-c"
+    - |
+      sed -i "s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g" k8s/deployment.yaml
 
   # ---------- Authenticate to GKE ----------
   - name: gcr.io/cloud-builders/gcloud

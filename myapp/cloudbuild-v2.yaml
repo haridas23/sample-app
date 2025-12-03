@@ -55,7 +55,7 @@ steps:
       ]
 
 images:
-  - "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA"
+  - "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app"
 
 options:
   logging: CLOUD_LOGGING_ONLY

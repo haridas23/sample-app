@@ -10,72 +10,30 @@ steps:
       ]
 
   # ---------- Push to Artifact Registry ----------
-  - name: gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/docker
     args:
       [
         "push",
         "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA"
       ]
-
   # ---------- Authenticate to GKE (Kubeconfig is written to /root/.kube/config) ----------
-  - name: gcr.io/cloud-builders/gcloud
-    args:
-      [
-        "container", "clusters", "get-credentials",
-        "gitlab-gke",
-        "--zone", "asia-south1-c",
-        "--project", "s-0-009988"
-      ]
-    # Set the KUBECONFIG env var here. The GKE credentials will be written to this path
-    # and saved to the 'kube' volume.
-    env:
-      - 'KUBECONFIG=/root/.kube/config'
-    volumes:
-      - name: kube
-        path: /root/.kube
-
-  # ---------- Replace image tag inside YAML (Requires KUBECONFIG for later steps) ----------
-  # No change to this step, but it must precede the kubectl steps.
-  - name: gcr.io/cloud-builders/gcloud
+ - name: gcr.io/cloud-builders/gcloud
     entrypoint: "bash"
     args:
       [
         "-c",
-        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml"
-      ]
-    volumes:
-      - name: kube
-        path: /root/.kube
+        # 1. Authenticate to GKE
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && "
 
-  # ---------- Apply Kubernetes manifests (KUBECONFIG is key here) ----------
-  - name: gcr.io/cloud-builders/kubectl
-    args:
-      [
-        "apply",
-        "-f", "myapp/deployment.yaml",
-        "--namespace", "default"
-      ]
-    volumes:
-      - name: kube
-        path: /root/.kube
-    # **Add the KUBECONFIG environment variable**
-    env:
-      - 'KUBECONFIG=/root/.kube/config' # Explicitly tells kubectl where to find the credentials
+        # 2. Replace image tag inside YAML
+        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml && "
 
-  # ---------- Wait for rollout (KUBECONFIG is key here) ----------
-  - name: gcr.io/cloud-builders/kubectl
-    args:
-      [
-        "rollout", "status",
-        "-f", "myapp/deployment.yaml",
-        "--namespace", "default"
+        # 3. Apply Kubernetes manifests
+        "kubectl apply -f myapp/deployment.yaml --namespace default && "
+
+        # 4. Wait for rollout
+        "kubectl rollout status -f myapp/deployment.yaml --namespace default"
       ]
-    volumes:
-      - name: kube
-        path: /root/.kube
-    # **Add the KUBECONFIG environment variable**
-    env:
-      - 'KUBECONFIG=/root/.kube/config' # Explicitly tells kubectl where to find the credentials
       
 options:
   logging: CLOUD_LOGGING_ONLY

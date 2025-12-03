@@ -17,7 +17,7 @@ steps:
         "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA"
       ]
 
-  # ---------- Authenticate to GKE ----------
+# ---------- Authenticate to GKE (Kubeconfig is written to /root/.kube/config) ----------
   - name: gcr.io/cloud-builders/gcloud
     args:
       [
@@ -26,11 +26,27 @@ steps:
         "--zone", "asia-south1-c",
         "--project", "s-0-009988"
       ]
+    # The GKE config is written to /root/.kube/config inside this container
     volumes:
       - name: kube
-        path: /root/.kube
+        path: /root/.kube # The shared volume# ... (Steps 1 & 2 are correct)
 
-  # ---------- Replace image tag inside YAML ----------
+  # ---------- Authenticate to GKE (Kubeconfig is written to /root/.kube/config) ----------
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      [
+        "container", "clusters", "get-credentials",
+        "gitlab-gke",
+        "--zone", "asia-south1-c",
+        "--project", "s-0-009988"
+      ]
+    # The GKE config is written to /root/.kube/config inside this container
+    volumes:
+      - name: kube
+        path: /root/.kube # The shared volume
+
+  # ---------- Replace image tag inside YAML (Requires KUBECONFIG for later steps) ----------
+  # No change to this step, but it must precede the kubectl steps.
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: "bash"
     args:
@@ -42,7 +58,7 @@ steps:
       - name: kube
         path: /root/.kube
 
-  # ---------- Apply Kubernetes manifests ----------
+  # ---------- Apply Kubernetes manifests (KUBECONFIG is key here) ----------
   - name: gcr.io/cloud-builders/kubectl
     args:
       [
@@ -53,8 +69,11 @@ steps:
     volumes:
       - name: kube
         path: /root/.kube
+    # **Add the KUBECONFIG environment variable**
+    env:
+      - 'KUBECONFIG=/root/.kube/config' # Explicitly tells kubectl where to find the credentials
 
-  # ---------- Wait for rollout ----------
+  # ---------- Wait for rollout (KUBECONFIG is key here) ----------
   - name: gcr.io/cloud-builders/kubectl
     args:
       [
@@ -65,9 +84,9 @@ steps:
     volumes:
       - name: kube
         path: /root/.kube
-
-images:
-  - "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app"
-
+    # **Add the KUBECONFIG environment variable**
+    env:
+      - 'KUBECONFIG=/root/.kube/config' # Explicitly tells kubectl where to find the credentials
+      
 options:
   logging: CLOUD_LOGGING_ONLY

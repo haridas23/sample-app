@@ -22,8 +22,8 @@ steps:
     args:
       [
         "container", "clusters", "get-credentials",
-        "CLUSTER_NAME",
-        "--zone", "CLUSTER_LOCATION",
+        "gitlab-gke",
+        "--zone", "asia-south1-c",
         "--project", "s-0-009988"
       ]
 

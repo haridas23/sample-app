@@ -10,7 +10,7 @@ steps:
       ]
 
   # ---------- Push to Artifact Registry ----------
-  - name: gcr.io-cloud-builders/docker
+  - name: gcr.io/cloud-builders/docker
     args:
       [
         "push",
@@ -36,18 +36,18 @@ steps:
     args:
       [
         "-c",
-        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml"
+        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" k8s/myapp/deployment.yaml"
       ]
     volumes:
       - name: kube
         path: /root/.kube
 
   # ---------- Apply Kubernetes manifests ----------
-  - name: "gcr.io/cloud-builders/kubectl"
+  - name: gcr.io/cloud-builders/kubectl
     args:
       [
         "apply",
-        "-f", "myapp/deployment.yaml",
+        "-f", "k8s/myapp/deployment.yaml",
         "--namespace", "default"
       ]
     volumes:
@@ -55,11 +55,11 @@ steps:
         path: /root/.kube
 
   # ---------- Wait for rollout ----------
-  - name: "gcr.io/cloud-builders/kubectl"
+  - name: gcr.io/cloud-builders/kubectl
     args:
       [
         "rollout", "status",
-        "-f", "myapp/deployment.yaml",
+        "-f", "k8s/myapp/deployment.yaml",
         "--namespace", "default"
       ]
     volumes:

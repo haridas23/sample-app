@@ -10,7 +10,7 @@ steps:
       ]
 
   # ---------- Push to Artifact Registry ----------
-- name: gcr.io/cloud-builders/docker
+  - name: gcr.io/cloud-builders/docker
     args:
       [
         "push",

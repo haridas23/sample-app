@@ -41,7 +41,7 @@ steps:
     args:
       [
         "apply",
-        "-f", "k8s/deployment.yaml",
+        "-f", "k8s/myapp/deployment.yaml",
         "--namespace", "default"
       ]
 
@@ -50,7 +50,7 @@ steps:
     args:
       [
         "rollout", "status",
-        "-f", "k8s/deployment.yaml",
+        "-f", "k8s/myapp/deployment.yaml",
         "--namespace", "default"
       ]
 

@@ -18,14 +18,14 @@ steps:
       ]
 
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
-  # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
+  # ❗ This is the corrected step structure ❗
   - name: gcr.io/cloud-builders/gcloud
-  entrypoint: "bash"
-  args:
-    [
-      "-c",
-      "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status **deployment/my-app** --namespace default"
-    ]
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status deployment/my-app --namespace default"
+      ]
       
 options:
   logging: CLOUD_LOGGING_ONLY

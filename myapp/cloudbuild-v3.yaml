@@ -17,20 +17,6 @@ steps:
         "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA"
       ]
 
-# ---------- Authenticate to GKE (Kubeconfig is written to /root/.kube/config) ----------
-  - name: gcr.io/cloud-builders/gcloud
-    args:
-      [
-        "container", "clusters", "get-credentials",
-        "gitlab-gke",
-        "--zone", "asia-south1-c",
-        "--project", "s-0-009988"
-      ]
-    # The GKE config is written to /root/.kube/config inside this container
-    volumes:
-      - name: kube
-        path: /root/.kube # The shared volume# ... (Steps 1 & 2 are correct)
-
   # ---------- Authenticate to GKE (Kubeconfig is written to /root/.kube/config) ----------
   - name: gcr.io/cloud-builders/gcloud
     args:

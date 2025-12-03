@@ -19,7 +19,7 @@ steps:
 
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
-- name: gcr.io/cloud-builders/gcloud
+  - name: gcr.io/cloud-builders/gcloud
   entrypoint: "bash"
   args:
     [

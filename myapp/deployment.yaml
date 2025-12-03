@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: IMAGE_PLACEHOLDER
+          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:$COMMIT_SHA
           ports:
             - containerPort: 8080

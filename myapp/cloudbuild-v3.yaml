@@ -1,6 +1,5 @@
 steps:
   # ---------- Build Docker Image ----------
-  # Builds the Docker image and tags it with the Artifact Registry path and unique commit SHA.
   - name: gcr.io/cloud-builders/docker
     args:
       [
@@ -11,7 +10,6 @@ steps:
       ]
 
   # ---------- Push to Artifact Registry ----------
-  # Pushes the newly built, tagged image to the Google Artifact Registry.
   - name: gcr.io/cloud-builders/docker
     args:
       [
@@ -20,26 +18,13 @@ steps:
       ]
 
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
-  # This step uses a single container to perform GKE Auth, image tagging, and deployment,
-  # ensuring that the kubeconfig file is available for kubectl immediately.
-  - name: gcr.io/cloud-builders/gcloud # This builder includes gcloud, bash, and kubectl.
+  - name: gcr.io/cloud-builders/gcloud
     entrypoint: "bash"
     args:
       [
         "-c",
-        # 1. Authenticate to GKE: Fetches credentials and writes kubeconfig.
-        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && "
-
-        # 2. Replace image tag inside YAML: Substitutes the placeholder with the new image tag.
-        "sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml && "
-
-        # 3. Apply Kubernetes manifests: Applies the updated deployment YAML to GKE.
-        "kubectl apply -f myapp/deployment.yaml --namespace default && "
-
-        # 4. Wait for rollout: Pauses the build until the new deployment is fully running.
-        "kubectl rollout status -f myapp/deployment.yaml --namespace default"
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:${COMMIT_SHA}#g\" myapp/deployment.yaml && kubectl apply -f myapp/deployment.yaml --namespace default && kubectl rollout status -f myapp/deployment.yaml --namespace default"
       ]
       
 options:
-  # Optimization to reduce GCS storage costs by only using Cloud Logging.
   logging: CLOUD_LOGGING_ONLY

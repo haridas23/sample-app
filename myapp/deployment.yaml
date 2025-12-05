@@ -19,3 +19,27 @@ spec:
           image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest
           ports:
             - containerPort: 3000
+          # Optional but recommended:
+           resources:
+             requests:
+               cpu: "100m"
+               memory: "256Mi"
+             limits:
+               cpu: "500m"
+               memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-ilb
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+spec:
+  type: LoadBalancer
+  selector:
+    app: sample-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000

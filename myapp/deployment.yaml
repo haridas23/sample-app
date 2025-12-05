@@ -19,14 +19,13 @@ spec:
           image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest
           ports:
             - containerPort: 3000
-          # Optional but recommended:
-          # resources:
-          #   requests:
-          #     cpu: "100m"
-          #     memory: "256Mi"
-          #   limits:
-          #     cpu: "500m"
-          #     memory: "512Mi"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 
 ---
 apiVersion: v1

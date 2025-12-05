@@ -33,6 +33,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: blue-sample-app-ilb
+  annotations:
+    cloud.google.com/backend-config: '{"default": "blue-sample-app-backendconfig"}'
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"blue-sample-app": "blue-sample-app-80"}}}'    
 spec:
   type: ClusterIP
   selector:

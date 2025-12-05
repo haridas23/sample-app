@@ -39,7 +39,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: green-sample-app
+    app: canary-sample-app
   ports:
     - name: http
       port: 80

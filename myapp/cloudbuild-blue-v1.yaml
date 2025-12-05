@@ -4,7 +4,7 @@ steps:
     args:
       [
         "build",
-        "-t", "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest",
+        "-t", "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-blue:latest",
         "-f", "myapp/Dockerfile",
         "myapp/"
       ]
@@ -14,7 +14,7 @@ steps:
     args:
       [
         "push",
-        "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest"
+        "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-blue:latest"
       ]
 
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------

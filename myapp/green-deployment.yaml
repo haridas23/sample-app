@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-app
+  name: green-sample-app
   labels:
-    app: sample-app
+    app: green-sample-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sample-app
+      app: green-sample-app
   template:
     metadata:
       labels:
-        app: sample-app
+        app: green-sample-app
     spec:
       containers:
-        - name: my-app
-          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest
+        - name: green-my-app
+          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-green:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -32,11 +32,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sample-app-ilb
+  name: green-sample-app-ilb
+  annotations:
+    cloud.google.com/backend-config: '{"default": "green-sample-app-backendconfig"}'
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"green-sample-app": "green-sample-app-80"}}}'  
 spec:
   type: ClusterIP
   selector:
-    app: sample-app
+    app: green-sample-app
   ports:
     - name: http
       port: 80

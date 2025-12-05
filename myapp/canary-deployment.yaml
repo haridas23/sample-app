@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: green-sample-app
+  name: canary-sample-app
   labels:
-    app: green-sample-app
+    app: canary-sample-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: green-sample-app
+      app: canary-sample-app
   template:
     metadata:
       labels:
-        app: green-sample-app
+        app: canary-sample-app
     spec:
       containers:
-        - name: green-my-app
-          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-green:latest
+        - name: canary-my-app
+          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-canary:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -32,10 +32,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: green-sample-app-ilb
+  name: canary-sample-app-ilb
   annotations:
-    cloud.google.com/backend-config: '{"default": "green-sample-app-backendconfig"}'
-    cloud.google.com/neg: '{"exposed_ports": {"80":{"green-sample-app": "green-sample-app-80"}}}'  
+    cloud.google.com/backend-config: '{"default": "canary-sample-app-backendconfig"}'
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"canary-sample-app": "canary-sample-app-80"}}}'  
 spec:
   type: ClusterIP
   selector:

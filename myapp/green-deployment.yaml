@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blue-sample-app
+  name: green-sample-app
   labels:
-    app: blue-sample-app
+    app: green-sample-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: blue-sample-app
+      app: green-sample-app
   template:
     metadata:
       labels:
-        app: blue-sample-app
+        app: green-sample-app
     spec:
       containers:
-        - name: blue-my-app
+        - name: green-my-app
           image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest
           imagePullPolicy: Always
           ports:
@@ -32,11 +32,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: blue-sample-app-ilb
+  name: green-sample-app-ilb
 spec:
   type: ClusterIP
   selector:
-    app: blue-sample-app
+    app: green-sample-app
   ports:
     - name: http
       port: 80

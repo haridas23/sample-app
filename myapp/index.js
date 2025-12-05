@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 app.get("/v1", (req, res) => {
-  res.send("Hello from Node.js Docker-green!");
+  res.send("Hello from Node.js Docker-canary!");
 });
 
 app.listen(3000, () => console.log("Server running on port 3000"));

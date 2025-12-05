@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-app.get("/v2", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello from Node.js Docker-green!");
 });
 

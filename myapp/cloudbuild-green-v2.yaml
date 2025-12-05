@@ -5,7 +5,7 @@ steps:
     args:
       [
         "build",
-        "-t", "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest",
+        "-t", "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-green:latest",
         "-f", "myapp/Dockerfile",
         "myapp/"
       ]
@@ -15,7 +15,7 @@ steps:
     args:
       [
         "push",
-        "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest"
+        "asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-green:latest"
       ]
 
   # 🚀 ---------- AUTHENTICATE AND DEPLOY (Consolidated Step) ----------
@@ -25,7 +25,7 @@ steps:
     args:
       [
         "-c",
-        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/green-deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/green-deployment.yaml --namespace default && kubectl rollout restart deployment/sample-app --namespace default"
+        "gcloud container clusters get-credentials gitlab-gke --zone asia-south1-c --project s-0-009988 && sed -i \"s#IMAGE_PLACEHOLDER#asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest#g\" myapp/green-deployment.yaml && gcloud auth configure-docker asia-south1-docker.pkg.dev && kubectl apply -f myapp/green-deployment.yaml --namespace default && kubectl rollout restart deployment/green-sample-app --namespace default"
       ]
       
 options:

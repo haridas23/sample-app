@@ -34,7 +34,7 @@ kind: Service
 metadata:
   name: sample-app-ilb
   annotations:
-    cloud.google.com/load-balancer-type: "Internal"
+    cloud.google.com/load-balancer-type: "External"
 spec:
   type: LoadBalancer
   selector:

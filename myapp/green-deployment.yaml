@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-sample-app
+  labels:
+    app: blue-sample-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blue-sample-app
+  template:
+    metadata:
+      labels:
+        app: blue-sample-app
+    spec:
+      containers:
+        - name: blue-my-app
+          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blue-sample-app-ilb
+spec:
+  type: ClusterIP
+  selector:
+    app: blue-sample-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000

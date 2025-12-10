@@ -29,9 +29,9 @@ spec:
     spec:
       containers:
         - name: statefull-sample-app
-          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-statefull
+          image: nginx:stable
           ports:
-            - containerPort: 3000
+            - containerPort: 80
               name: http
           readinessProbe:
             httpGet:

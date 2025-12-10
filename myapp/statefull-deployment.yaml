@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: statefull-sample-app
-          image: nginx:stable
+          image: asia-south1-docker.pkg.dev/s-0-009988/sample-app/my-app-statefull
           ports:
             - containerPort: 3000
               name: http
